@@ -15,6 +15,7 @@ const sessionStore = new session.MemoryStore();
 const io = require("socket.io")(http);
 const cors = require("cors");
 const passportSocketIo = require("passport.socketio");
+require('dotenv').config();
 app.use(cors());
 
 fccTesting(app); //For FCC testing purposes

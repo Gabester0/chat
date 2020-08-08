@@ -1,3 +1,8 @@
+const updatePosition = ()=> {
+  const msg = document.getElementById("messages");
+  msg.scrollTop = msg.scrollHeight
+}
+
 $( document ).ready(function() {
    
       
@@ -30,6 +35,8 @@ $( document ).ready(function() {
         let li = document.createElement("li");
         li.innerHTML = message;
         document.getElementById("messages").appendChild(li)
+
+        updatePosition();
       });
   
       socket.on('chat message', (data)=>{
@@ -38,8 +45,9 @@ $( document ).ready(function() {
         const listEl = document.createElement("li");
         listEl.textContent = `${messageData.name}: ${messageData.message}`;
         document.getElementById("messages").appendChild(listEl);
+        
+        updatePosition();
       })
   
     
   });
-  

@@ -3,7 +3,6 @@
 const express = require("express");
 const session = require("express-session");
 const bodyParser = require("body-parser");
-const fccTesting = require("./freeCodeCamp/fcctesting.js");
 const auth = require("./app/auth.js");
 const routes = require("./app/routes.js");
 const mongo = require("mongodb").MongoClient;
@@ -17,8 +16,6 @@ const cors = require("cors");
 const passportSocketIo = require("passport.socketio");
 require('dotenv').config();
 app.use(cors());
-
-fccTesting(app); //For FCC testing purposes
 
 app.use("/public", express.static(process.cwd() + "/public"));
 app.use(cookieParser());
@@ -45,10 +42,11 @@ mongo.connect(process.env.DATABASE, (err, client) => {
     auth(app, db);
     routes(app, db);
 
-    http.listen(process.env.PORT || 3000);
+    http.listen( (process.env.PORT || 3000), ()=>{
+      console.log(`Server is listening on port ${process.env.PORT}`)
+    });
 
     //start socket.io code
-
     io.use(passportSocketIo.authorize({
       cookieParser:   cookieParser,
       key:            'express.sid',
@@ -56,9 +54,9 @@ mongo.connect(process.env.DATABASE, (err, client) => {
       store:          sessionStore
     }, (success, fail)=>{
       if(success){
-        console.log("%c authorize with socket successful!", "color: #00ee00; background-color: black;");
+        console.log("Authorization with socket successful!");
       } else {
-        console.log("%c authorize with socket failed.", "color: red; background-color: black;");
+        console.log("Authorization with socket failed: ", fail);
       }
     }));
     
